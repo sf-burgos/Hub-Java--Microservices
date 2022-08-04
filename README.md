@@ -214,5 +214,79 @@ public class ItemController {
 ![image](https://user-images.githubusercontent.com/45188320/182864457-a72cc40a-4325-4ee9-ae9c-03ab375164de.png)
 ![image](https://user-images.githubusercontent.com/45188320/182864507-28e6c254-880a-453c-b1bc-f9de9ae171c7.png)
 
+# Microservice, Part 3 (20%)
+
+Note: please read after start this site [REST Client: Feign](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
+
+15. Add the _spring-cloud-version_, the dependencies (spring cloud and openfeign) and dependencyManagement in the _pom.xml_ in the microservice _ITEM_:
+```
+<properties>
+	<java.version>17</java.version>
+	<spring-cloud.version>2021.0.3</spring-cloud.version>
+</properties>
+```
+```
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-bootstrap</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-openfeign</artifactId>
+	<version>3.1.3</version>
+</dependency>
+```
+```
+<dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-dependencies</artifactId>
+			<version>${spring-cloud.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+	</dependencies>
+</dependencyManagement>
+```
+16. Add the annotation _microservice-item/src/main/java/com/perficient/microservices/app/items/ItemsApplication.java_ (main class)
+```
+@EnableFeignClients
+```
+17. Create a package _microservice-item/src/main/java/com/perficient/microservices/app/items/clients_ and build a inteface _ProductClientRest.java_ and implementation _ItemServiceFeign.java_  
+```
+@FeignClient(name="service-products", url="localhost:8001")
+public interface ProductClientRest {
+
+  @GetMapping("/products")
+  public List<Product> getAll();
+
+  @GetMapping("/product/{id}")
+  public Product getById(@PathVariable Long id);
+}
+```
+```
+@Service("itemServiceFeign")
+@Primary
+public class ItemServiceFeign implements IItemService {
+
+  @Autowired
+  private ProductClientRest productClientRest;
+
+  @Override
+  public List<Item> findAll() {
+    return productClientRest.getAll().stream().map(product -> new Item(product, 1)).collect(Collectors.toList());
+  }
+
+  @Override
+  public Item findById(Long id, Integer amount) {
+    return new Item(productClientRest.getById(id), amount);
+  }
+}
+```
 
 
