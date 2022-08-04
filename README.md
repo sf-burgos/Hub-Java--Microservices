@@ -103,17 +103,116 @@ public class ProductController {
 INSERT INTO product (name, cost, created_at) VALUES ('Chocoramo', 1000, NOW());
 INSERT INTO product (name, cost, created_at) VALUES ('Gansito', 800, NOW());
 ```
-9. Run the project and verify the endpoint in _localhost:8001_ (please, add a screenshot here 📷)
+9. Run the project and verify the endpoint in _localhost:8001_ (please, add some screenshots here 📷)
 ![image](https://user-images.githubusercontent.com/45188320/182855480-dba7ff8f-2dc3-4f6c-9729-8826748a358c.png)
 
-10. Verify the funtiality with _postman_ or your favorite API platform for developers to design(please, add a screenshot here with your JSON 📷): 
+10. Verify the funtiality with _postman_ or your favorite API platform for developers to design(please, add some screenshots here with your JSONs 📷): 
 ![image](https://user-images.githubusercontent.com/45188320/182855289-9fc7a0ba-dda5-4181-a1dc-22681c2d07d3.png)
 ![image](https://user-images.githubusercontent.com/45188320/182855615-fc073bfb-e540-433c-9982-168f4932bbce.png)
 
+# Microservice, Part 2 (20%)
 
+11. Repeat the first step and create a new microservice with the same dependencies excluded _H2_ and adding _Spring Data Jpa_:
+![image](https://user-images.githubusercontent.com/45188320/182857493-845590b1-9103-4bd8-ac9f-d372ea87d5e3.png)
+![image](https://user-images.githubusercontent.com/45188320/182858280-c61aa3dd-53d3-4fef-8539-f0a3dd906ebc.png)
 
- 
+12. So, this microservice _items_ is very similar like _products_. The structure is the same: 
 
+```
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Item {
+
+  private Product product;
+  private Integer amount;
+
+  public Double getTotal() {
+    return product.getCost() * amount.doubleValue();
+  }
+
+}
+```
+```
+@Getter
+@Setter
+public class Product {
+
+  private Long id;
+  private String name;
+  private Double cost;
+  private Date createdAt;
+}
+```
+```
+spring.application.name = service-item
+spring.port = 8002
+```
+```
+public interface IItemService {
+
+  List<Item> findAll();
+
+  Item findById(Long id, Integer amount);
+}
+```
+```
+@Service
+public class ItemServiceImpl implements IItemService {
+
+  @Autowired
+  private RestTemplate clientRest;
+
+  @Override
+  public List<Item> findAll() {
+    return Arrays.stream(
+            Objects.requireNonNull(clientRest.getForObject("http://localhost:8001/products", Product[].class)))
+        .map(product -> new Item(product, 1)).collect(
+            Collectors.toList());
+  }
+
+  @Override
+  public Item findById(Long id, Integer amount) {
+    Map<String, String> pathVariables = new HashMap<>();
+    pathVariables.put("id", id.toString());
+    Product product = clientRest.getForObject("http://localhost:8001/product/{id}", Product.class, pathVariables);
+    return new Item(product, amount);
+  }
+}
+```
+
+```
+@RestController
+public class ItemController {
+
+  @Autowired
+  private IItemService itemService;
+
+  @GetMapping("/items")
+  public List<Item> findAll() {
+    return itemService.findAll();
+  }
+
+  @GetMapping("/item/{id}/amount/{amount}")
+  public Item detail(@PathVariable Long id, @PathVariable Integer amount) {
+    return itemService.findById(id, amount);
+  }
+}
+
+```
+13. Questions for you. (Please write your answers here ✏️)
+
+- Explain with your words the Class _ItemServiceImpl.java_
+- Why the class ItemServiceImpl.java needs RestTemplate with the annotation @Autowired
+- Go to implementation RestTemplate and describe the functionality.
+- What is the annotation @PathVariable in the ItemController.java. Type here:
+
+14. Run the project and verify the endpoint in _localhost:8002_ and use postman with the enpoints (please, add some screenshots here 📷)
+
+![image](https://user-images.githubusercontent.com/45188320/182864373-817d8e32-45f3-4e69-85e6-4a628e71d6e7.png)
+![image](https://user-images.githubusercontent.com/45188320/182864457-a72cc40a-4325-4ee9-ae9c-03ab375164de.png)
+![image](https://user-images.githubusercontent.com/45188320/182864507-28e6c254-880a-453c-b1bc-f9de9ae171c7.png)
 
 
 
