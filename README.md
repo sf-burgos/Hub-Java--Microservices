@@ -8,7 +8,9 @@
 Using spring boot, openfeign, spring cloud, and eureka, you will create your first microservices and understand the benefits and disadvantages of this architecture mode.
 <h1></h1>
 
-### _🧑‍💻Mentor -> [Brayan Burgos](https://www.linkedin.com/in/brayan-steven-burgos-delgado-21a9a0178/)_
+### _🧑‍💻Mentors -> [Brayan Burgos](https://www.linkedin.com/in/brayan-steven-burgos-delgado-21a9a0178/) & [Nicolas Ordoñez](https://www.linkedin.com/in/nicolas-ordonez-chala/)_
+
+
 
 # Microservice, Part 1 (20%)
 
