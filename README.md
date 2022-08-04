@@ -288,5 +288,32 @@ public class ItemServiceFeign implements IItemService {
   }
 }
 ```
+18. Try to run your project, _What is happening?_ (Please write your answers here ✏️) and upload images to explain the situation:
+19. Add the annotation _@Qualifier_ in _ItemController.java_:
+```
+  @Autowired
+  @Qualifier("itemServiceFeign")
+  private IItemService itemService;
+```
+20. Run the project and verify the endpoint in _localhost:8002_ and use postman with the enpoints (please, add some screenshots here 📷)
 
+# Microservice, Part 4 (20%)
+21. Create a new project: 
+![image](https://user-images.githubusercontent.com/45188320/182936369-a9f59f53-c522-494a-8ed9-9c5f5b3c4abe.png)
+
+22. Add in _eureka-server/src/main/resources/application.properties_: 
+```
+spring.application.name=service-eureka
+server.port=8761
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+```
+
+23. Add the _dependency_ in _eureka-server/pom.xml_
+```
+<dependency>
+	<groupId>org.glassfish.jaxb</groupId>
+	<artifactId>jaxb-runtime</artifactId>
+</dependency>
+```
 
