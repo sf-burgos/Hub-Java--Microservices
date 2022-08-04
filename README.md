@@ -97,12 +97,18 @@ public class ProductController {
   }
 }
 ```
-8. In the source src/main/resources, create import.sql and add those inserts and please add at least _20_, creativity with the new products:
+8. In the source src/main/resources, create _import.sql_ and add those inserts and please add at least _20_, 💡 creativity with the new products:
 ```
 INSERT INTO product (name, cost, created_at) VALUES ('Chocoramo', 1000, NOW());
 INSERT INTO product (name, cost, created_at) VALUES ('Gansito', 800, NOW());
-´´´´
-9. Run the project and verify the endpoint in _localhost:8081_ (add a screenshot here)
+```
+9. Run the project and verify the endpoint in _localhost:8001_ (please, add a screenshot here 📷)
+![image](https://user-images.githubusercontent.com/45188320/182855480-dba7ff8f-2dc3-4f6c-9729-8826748a358c.png)
+
+10. Verify the funtiality with _postman_ or your favorite API platform for developers to design(please, add a screenshot here with your JSON 📷): 
+![image](https://user-images.githubusercontent.com/45188320/182855289-9fc7a0ba-dda5-4181-a1dc-22681c2d07d3.png)
+![image](https://user-images.githubusercontent.com/45188320/182855615-fc073bfb-e540-433c-9982-168f4932bbce.png)
+
 
 
  
