@@ -316,4 +316,8 @@ eureka.client.fetch-registry=false
 	<artifactId>jaxb-runtime</artifactId>
 </dependency>
 ```
+24. add this annotation in _eureka-server/src/main/java/com/perficient/microservices/app/eureka/EurekaApplication.java_
+```
+@EnableEurekaServer
+```
 
